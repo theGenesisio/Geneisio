@@ -17,9 +17,9 @@ const saveRefreshToken = (refreshToken) => {
 // Load and save user to localStorage
 const saveUserToLocal = (user) => {
   if (user) {
-    localStorage.setItem("zenithUser", JSON.stringify(user)); // Store as a simple string
+    localStorage.setItem("genesisioUser", JSON.stringify(user)); // Store as a simple string
   } else {
-    localStorage.removeItem("zenithUser");
+    localStorage.removeItem("genesisioUser");
   }
 };
 
@@ -33,7 +33,7 @@ const getRefreshToken = () => {
 };
 // Retrieve accessToken directly from localStorage
 const getUserFromLocal = () => {
-  return JSON.parse(localStorage.getItem("zenithUser")) || null;
+  return JSON.parse(localStorage.getItem("genesisioUser")) || null;
 };
 // Open (or create) the database
 function openDatabase() {
@@ -42,8 +42,8 @@ function openDatabase() {
     // Create the schema if needed
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains("zenithToken")) {
-        db.createObjectStore("zenithToken", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("genesisioToken")) {
+        db.createObjectStore("genesisioToken", { keyPath: "id" });
       }
     };
     request.onsuccess = (event) => resolve(event.target.result);
@@ -52,8 +52,8 @@ function openDatabase() {
 }
 async function storeRefreshToken(token) {
   const db = await openDatabase();
-  const transaction = db.transaction("zenithToken", "readwrite");
-  const store = transaction.objectStore("zenithToken");
+  const transaction = db.transaction("genesisioToken", "readwrite");
+  const store = transaction.objectStore("genesisioToken");
 
   // Save the token with a specific ID (e.g., "refreshToken")
   const request = store.put({ id: "refreshToken", value: token });
@@ -64,8 +64,8 @@ async function storeRefreshToken(token) {
 }
 async function getRefreshTokenFromDb() {
   const db = await openDatabase();
-  const transaction = db.transaction("zenithToken", "readonly");
-  const store = transaction.objectStore("zenithToken");
+  const transaction = db.transaction("genesisioToken", "readonly");
+  const store = transaction.objectStore("genesisioToken");
 
   // Retrieve the token by its ID
   const request = store.get("refreshToken");
@@ -82,8 +82,8 @@ async function getRefreshTokenFromDb() {
 }
 async function deleteRefreshTokenFromDb() {
   const db = await openDatabase();
-  const transaction = db.transaction("zenithToken", "readwrite"); // Use readwrite for deletion
-  const store = transaction.objectStore("zenithToken");
+  const transaction = db.transaction("genesisioToken", "readwrite"); // Use readwrite for deletion
+  const store = transaction.objectStore("genesisioToken");
 
   // Delete the token by its ID
   const request = store.delete("refreshToken");
