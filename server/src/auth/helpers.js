@@ -10,7 +10,7 @@ const mail = async (email, subject, html) => {
     // Use environment variables for credentials
     const MAILER_USERNAME = process.env.MAILER_USERNAME;
     const MAILER_PASSWORD = process.env.MAILER_PASSWORD;
-
+    const DKIM_PRIVATE_KEY = process.env.DKIM_PRIVATE_KEY; // Ensure you have your DKIM key here
     // Configure Nodemailer with Namecheap's Private Email settings
     const transporter = nodemailer.createTransport({
         host: "mail.privateemail.com", // Namecheap's server, do not change
@@ -19,6 +19,12 @@ const mail = async (email, subject, html) => {
         auth: {
             user: MAILER_USERNAME,
             pass: MAILER_PASSWORD,
+        },
+        // Adding DKIM configuration
+        dkim: {
+            domainName: 'genesisio.net',  // Replace with your sending domain
+            keySelector: 'default',        // Replace if you use a different selector
+            privateKey: DKIM_PRIVATE_KEY,
         },
     });
 
