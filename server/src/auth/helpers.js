@@ -4,7 +4,7 @@ import JWT from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 // ** Helper for reauthenticating user access token
 async function generateAccessToken(user) {
-    return JWT.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: '168h' })
+    return JWT.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: '24h' })
 }
 const mail = async (email, subject, html) => {
     // Use environment variables for credentials

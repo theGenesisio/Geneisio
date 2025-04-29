@@ -190,7 +190,10 @@ const Withdrawal = () => {
                 <Loader />
               ) : (
                 withdrawalOptions.map((opt) => (
-                  <option key={opt._id} value={opt.name}>
+                  <option
+                    key={opt._id}
+                    value={opt.name}
+                    disabled={opt.name === "cashapp" || opt.name === "paypal"}>
                     {opt.name.toUpperCase()}
                   </option>
                 ))

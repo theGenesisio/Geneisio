@@ -11,8 +11,8 @@ const Hero = () => {
       <div className='lg:max-w-xl hero'>
         <h1 className='text-4xl font-bold mb-4'>Smart Solutions for Trading and Investing</h1>
         <p className='text-lg text-gray-600 mb-6'>
-          With effortless trading and investing, we’ve enabled 1.3 million+ customers to reach their
-          financial goals.
+          With effortless trading and investing,we’ve enabled 1.3 million+ customers reach their
+          financial goals. Enjoy safe secure digital asset holding wallet.
         </p>
 
         <div className='flex flex-row justify-start gap-2 w-full'>

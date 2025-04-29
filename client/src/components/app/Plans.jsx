@@ -238,7 +238,7 @@ export default function PricingCard() {
           className='w-full md:max-w-md mx-auto md:mx-0 p-6 mt-4'>
           <div className='flex justify-between'>
             <Typography variant='h5' className='mb-4'>
-              Selected Plan: {selectedPlan.name}
+              Selected Investment: {selectedPlan.name}
             </Typography>
             <QuestionMarkCircleIcon
               title='Info'
