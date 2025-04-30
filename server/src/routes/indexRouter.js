@@ -265,10 +265,10 @@ Router.route('/plans')
     })
 Router.route('/investment')
     .post(authenticate, async (req, res) => {
-        const { amount, plan } = req.body;
+        const { amount, plan, frequency } = req.body;
         const { _id, email } = req.user;
         try {
-            const request = await updateInvestmentRequest({ plan, amount, userId: _id, email });
+            const request = await updateInvestmentRequest({ plan, amount, userId: _id, email, frequency });
             if (!request) {
                 return res.status(404).json({ message: 'Investment request failed' });
             }

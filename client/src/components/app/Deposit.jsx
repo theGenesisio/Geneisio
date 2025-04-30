@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Placeholder10 } from "../../assets/utilities";
 import FetchWithAuth from "../auth/api";
-import DepositOption from "./subComponents/DepositOption";
+// import DepositOption from "./subComponents/DepositOption";
 import { useNotification } from "../layout/NotificationHelper";
 import Loader from "./subComponents/Loader";
 import {
   BuildingLibraryIcon,
-  CursorArrowRaysIcon,
+  // CursorArrowRaysIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid";
 import {
@@ -17,12 +16,14 @@ import {
   ltcIcon,
   paypalIcon,
 } from "../../assets/icons";
+import DepositModal from "./subComponents/DepositOptionModal";
 const Deposit = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [depositOptions, setDepositOptions] = useState([]);
   const [selectedDetails, setSelectedDetails] = useState(null);
   const { addNotification } = useNotification();
-
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen((cur) => !cur);
   useEffect(() => {
     const fetchDepositOptions = async () => {
       try {
@@ -63,6 +64,8 @@ const Deposit = () => {
     return iconMap[name.toLowerCase()] || <BuildingLibraryIcon className='w-5 h-5' />;
   };
   const handleSelectOption = (index) => {
+    handleOpen();
+    // Close the modal if the same option is clicked again
     setSelectedDetails(depositOptions[index]);
   };
 
@@ -71,10 +74,7 @@ const Deposit = () => {
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 md:gap-2 gap-x-0 gap-y-5'>
         {isLoading ? (
           <div className='deposit-box'>
-            <div className='absolute -top-[25%] left-[35%]'>
-              <img src={Placeholder10} alt='QR code' className='w-10 h-10 rounded-lg shadow-lg' />
-            </div>
-            <div className='text-lg font-semibold flex justify-center px-2 mt-6'>
+            <div className='text-lg font-semibold flex justify-center px-2 mt-16'>
               <Loader />
             </div>
           </div>
@@ -108,7 +108,7 @@ const Deposit = () => {
         </div>
       )}
 
-      {!selectedDetails ? (
+      {/* {!selectedDetails ? (
         <div
           className={`w-full h-[50vh] lg:max-w-md mx-auto lg:mx-0 bg-transparent flex flex-row justify-center lg:justify-start text-primary-light space-x-2 p-10 lg:ps-0 ${
             depositOptions.length === 0 && !isLoading ? "hidden" : ""
@@ -118,7 +118,8 @@ const Deposit = () => {
         </div>
       ) : (
         <DepositOption detail={selectedDetails} />
-      )}
+      )} */}
+      <DepositModal detail={selectedDetails} handler={handleOpen} openState={open} />
     </div>
   );
 };

@@ -377,6 +377,10 @@ const plansSchema = new Schema({
         required: [true, 'ROI Percentage is required'],
         min: [0, 'ROI Percentage must be a positive number'],
     },
+    frequency: {
+        type: Number,
+        default: 1,
+    },
     duration: {
         type: Number,
         required: [true, 'Duration is required'],
@@ -422,6 +426,10 @@ const investmentSchema = new Schema({
     amount: {
         type: Number,
         required: [true, 'Investment amount is required'],
+    },
+    frequency: {
+        type: Number,
+        default: 1,
     },
     status: {
         type: String,

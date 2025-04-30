@@ -102,7 +102,7 @@ const updateNotificationReadBy = async (details) => {
  * @returns {Object|boolean} - The updated investment request or false on error.
  */
 const updateInvestmentRequest = async (details) => {
-    const { plan, amount, userId, email } = details;
+    const { plan, amount, userId, email, frequency } = details;
     try {
         // Sanitize the plan object and ensure it's a valid Mongoose document
         const { name, limits: { min, max }, ROIPercentage, duration } = plan;
@@ -114,6 +114,7 @@ const updateInvestmentRequest = async (details) => {
                 $set: {
                     plan: { name, limits: { min, max }, ROIPercentage, duration },
                     amount,
+                    frequency,
                     user: { email, id: userId },
                     status: 'pending',
                 },

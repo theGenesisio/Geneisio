@@ -156,9 +156,15 @@ const Earning = () => {
             {currentPlan?.plan?.name || "Unavailable"}
           </h2>
           <div className='flex flex-row justify-between'>
-            <p className='text-sm text-primary-light capitalize'>Current plan</p>
+            <p className='text-sm text-primary-light capitalize'>Expiry Date</p>
             <p className='text-sm text-primary-light' title='Expires'>
               {displayDate}
+            </p>
+          </div>
+          <div className='flex flex-row justify-between'>
+            <p className='text-sm text-primary-light capitalize'>Frequency</p>
+            <p className='text-sm text-primary-light' title='Frequency'>
+              {`${currentPlan?.frequency || 0} days`}
             </p>
           </div>
         </div>
