@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import FetchWithAuth from "../auth/api";
-// import DepositOption from "./subComponents/DepositOption";
 import { useNotification } from "../layout/NotificationHelper";
 import Loader from "./subComponents/Loader";
-import {
-  BuildingLibraryIcon,
-  // CursorArrowRaysIcon,
-  ExclamationTriangleIcon,
-} from "@heroicons/react/24/solid";
+import { BuildingLibraryIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import {
   btcIcon,
   cashasppIcon,
@@ -107,18 +102,6 @@ const Deposit = () => {
           <ExclamationTriangleIcon className='w-5 h-5' />
         </div>
       )}
-
-      {/* {!selectedDetails ? (
-        <div
-          className={`w-full h-[50vh] lg:max-w-md mx-auto lg:mx-0 bg-transparent flex flex-row justify-center lg:justify-start text-primary-light space-x-2 p-10 lg:ps-0 ${
-            depositOptions.length === 0 && !isLoading ? "hidden" : ""
-          }`}>
-          <p className='text-sm font-semibold'>Select a deposit option</p>
-          <CursorArrowRaysIcon className='w-7 h-7' />
-        </div>
-      ) : (
-        <DepositOption detail={selectedDetails} />
-      )} */}
       <DepositModal detail={selectedDetails} handler={handleOpen} openState={open} />
     </div>
   );

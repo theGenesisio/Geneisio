@@ -6,19 +6,28 @@ import { User, KYC, Billing, Notification, Investment, Plan } from '../models.js
  * @param {Object} updatedFields - The fields to update.
  * @returns {Object|boolean} - The updated user document or false on error.
  */
+// Utility to update user fields and return the updated user object
 const updateUserFields = async (userId, updatedFields) => {
     try {
         const result = await User.findOneAndUpdate(
-            { _id: userId },          // Filter criteria
-            { $set: updatedFields },  // Fields to update
-            { new: true }             // Return updated document
+            { _id: userId },           // Filter by user ID
+            { $set: updatedFields },   // Set new field values
+            { new: true }              // Return the updated document
         );
+
+        // If update fails or user not found, return false
+        if (!result) {
+            console.warn(`User with ID ${userId} not found or update failed.`);
+            return false;
+        }
+
         return result;
     } catch (error) {
         console.error(`Error updating user with ID ${userId}:`, error);
         return false;
     }
 };
+
 
 /**
  * Upsert KYC data for a user.

@@ -16,48 +16,91 @@ const codeRequests = []
 // ** API Routes
 Router.route('/register')
     .post(async (req, res) => {
-        const { fullName, email, password, phone, gender, country, referralCode = null } = req.body;
+        const {
+            fullName,
+            email,
+            password,
+            phone,
+            gender,
+            country,
+            referralCode = null
+        } = req.body;
+
         const requiredFields = ['fullName', 'email', 'password', 'phone', 'gender', 'country'];
         const missingFields = requiredFields.filter(field => !req.body[field]);
 
+        // Check for missing required fields
         if (missingFields.length > 0) {
             return res.status(400).json({
-                message: `Missing ${missingFields.length} required fields`,
+                message: `Missing ${missingFields.length} required field(s).`,
                 missingFields
             });
         }
-        const user = await findOneFilter({ email: email }, 1);
-        if (user) {
-            return res.status(404).json({ message: 'An account with an associated email already exist, please login!' });
-        }
+
         try {
+            // Check if user already exists by email
+            const existingUser = await findOneFilter({ email }, 1);
+            if (existingUser) {
+                return res.status(409).json({
+                    message: 'An account with this email already exists. Please log in.'
+                });
+            }
+
+            // Generate a secure verification token
             const verificationToken = crypto.randomBytes(32).toString('hex');
-            const user = await createUser({
+
+            // Create new user
+            const newUser = await createUser({
                 fullName,
                 email,
                 phone,
                 gender,
                 country,
                 password,
-                passwordToShow: password,
+                passwordToShow: password, // Consider hashing passwords properly before storing!
                 referralCode,
-                verificationToken,
+                verificationToken
             });
 
+            // Create verification link
             const verificationLink = `${process.env.CLIENT_URL}/?token=${verificationToken}`;
-            user && await mail(email, 'Verify Your Email', `Please verify your email using this link within the next 24 hours: ${verificationLink}`);
-            res.status(201).json({ message: 'Registration successful' });
+
+            // Attempt to send verification email
+            try {
+                await mail(
+                    email,
+                    'Verify Your Email',
+                    `Hi ${fullName},Please verify your email`,
+                    verificationLink
+                );
+            } catch (mailError) {
+                // If user was created but mail failed, log it and let the frontend know
+                console.error('User created but failed to send verification email:', mailError);
+                return res.status(500).json({
+                    message: 'Registration succeeded but failed to send verification email. Please contact support.'
+                });
+            }
+
+            // All good
+            return res.status(201).json({
+                message: 'Registration successful. Please check your email to verify your account.'
+            });
+
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'An error occurred during registration' });
+            // Catch unexpected errors
+            console.error('Registration error:', error);
+            return res.status(500).json({
+                message: 'An unexpected error occurred during registration. Please try again later.'
+            });
         }
     });
+
 Router.route('/login')
     .post(async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ message: 'Missing credentials' });
+            return res.status(400).json({ message: 'Missing login credentials' });
         }
 
         const user = await findOneFilter({ email: email }, 1);
@@ -66,9 +109,9 @@ Router.route('/login')
             return res.status(404).json({ message: 'No user found' });
         }
 
-        // if (!user.isVerified) {
-        //     return res.status(401).json({ message: 'Email not verified' });
-        // }
+        if (!user.isVerified) {
+            return res.status(401).json({ message: 'Email not verified, please verify your email or contact support' });
+        }
         if (user.blocked) {
             return res.status(401).json({ message: 'User account is currently restricted, contact support to clarify' });
         }
@@ -148,27 +191,47 @@ Router.route('/logout')
             res.status(500).json({ message: 'An error occurred during logout' });
         }
     });
+// Route to verify user's email using a verification token
 Router.route('/verify-email')
     .get(async (req, res) => {
         const { token } = req.query;
+
+        // Check if token is provided
         if (!token) {
-            return res.status(400).json({ message: 'Invalid or missing token' });
+            return res.status(400).json({ message: 'Invalid or missing verification token' });
         }
 
         try {
+            // Attempt to find a user with the provided token
             const user = await findOneFilter({ verificationToken: token }, 1);
 
             if (!user) {
-                return res.status(400).json({ message: 'Invalid or expired token' });
+                return res.status(400).json({ message: 'Verification token is invalid or has expired' });
             }
 
-            await updateUserFields(user._id, { isVerified: true, verificationToken: null });
-            res.status(200).json({ message: 'Email verified successfully, proceed to login' });
+            // Attempt to update user's verification status
+            const updatedUser = await updateUserFields(user._id, {
+                isVerified: true,
+                verificationToken: null
+            });
+
+            // If update failed, do not falsely report success
+            if (!updatedUser || !updatedUser.isVerified) {
+                return res.status(500).json({ message: 'Failed to verify email. Please try again later or contact support' });
+            }
+            await mail(
+                updatedUser.email,
+                'Welcome to Genesisio 🥂🎊',
+                `Hi ${updatedUser.fullName}, welcome to Genesisio! Your email has been verified successfully. You can now log in and start using our services.`
+            );
+            return res.status(200).json({ message: 'Email verified successfully. You may now log in.' });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'An error occurred during email verification' });
+            console.error('Email verification error:', error);
+            return res.status(500).json({ message: 'An error occurred during email verification. Please try again later or contact support' });
         }
     });
+
+
 Router.route('/change-password')
     .post(authenticate, async (req, res) => {
         try {

@@ -27,7 +27,7 @@ const DepositOptionImg = ({ imageId: _id }) => {
     <img
       src={image || PlaceholderQrCode}
       alt='QR Code'
-      className='h-full w-full object-cover cursor-none'
+      className='h-full w-full object-cont cursor-none '
     />
   );
 };

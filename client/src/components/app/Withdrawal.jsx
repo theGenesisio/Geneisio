@@ -193,7 +193,9 @@ const Withdrawal = () => {
                   <option
                     key={opt._id}
                     value={opt.name}
-                    disabled={opt.name === "cashapp" || opt.name === "paypal"}>
+                    disabled={
+                      opt.name === "cashapp" || opt.name === "paypal" || opt.name === "bank"
+                    }>
                     {opt.name.toUpperCase()}
                   </option>
                 ))

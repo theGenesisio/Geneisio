@@ -22,6 +22,8 @@ export default function InvestmentModal({ selectedPlan, onClose }) {
 
   // Options for timing selection
   const timingOptions = [
+    { text: "1 day", equiv: 1 },
+    { text: "2 days", equiv: 2 },
     { text: "3 days", equiv: 3 },
     { text: "1 week", equiv: 7 },
     { text: "2 weeks", equiv: 14 },

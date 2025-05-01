@@ -126,7 +126,7 @@ export function DepositModal({ detail, handler, openState }) {
           variant='gradient'
           color='gray'
           className='w-full max-w-[96dvh] md:max-w-[26rem] mx-auto md:mx-0'>
-          <CardHeader shadow={false} floated={false} className='h-96'>
+          <CardHeader shadow={false} floated={false} className='h-72'>
             <DepositOptionImg imageId={details?.qrCode} />
           </CardHeader>
           <CardBody className='text-text-light flex flex-col space-y-2'>
