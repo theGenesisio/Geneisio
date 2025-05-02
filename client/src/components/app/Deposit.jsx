@@ -10,6 +10,7 @@ import {
   ethIcon,
   ltcIcon,
   paypalIcon,
+  usdtIcon,
 } from "../../assets/icons";
 import DepositModal from "./subComponents/DepositOptionModal";
 const Deposit = () => {
@@ -55,8 +56,12 @@ const Deposit = () => {
       dogecoin: dogecoinIcon,
       cashapp: cashasppIcon,
       paypal: paypalIcon,
+      usdt: usdtIcon,
     };
-    return iconMap[name.toLowerCase()] || <BuildingLibraryIcon className='w-5 h-5' />;
+    return (
+      iconMap[name.toLowerCase()] ||
+      (name.toLowerCase().includes("usdt") ? usdtIcon : <BuildingLibraryIcon className='w-5 h-5' />)
+    );
   };
   const handleSelectOption = (index) => {
     handleOpen();
