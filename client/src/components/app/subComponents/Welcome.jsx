@@ -22,6 +22,7 @@ const Welcome = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const profit = parseFloat(user?.wallet?.balance || "0.00");
+  const profitFluctuation = parseFloat(user?.wallet?.fluctuation || "0.00");
   const formattedBalance =
     profit < 0 ? `-$${Math.abs(profit).toLocaleString()}` : `$${profit.toLocaleString()}`;
 
@@ -31,7 +32,17 @@ const Welcome = () => {
         <UserIcon className='h-7 w-7' />
         <h1 className='font-semibold text-xl'>{user?.fullName || "Customer"}</h1>
         <p className='text-sm text-primary-light capitalize'>Account Balance</p>
-        <p className='font-semibold text-3xl lg:text-4xl py-4 text-white'>{formattedBalance}</p>
+        <p className='font-semibold text-2xl lg:text-4xl py-4 text-white'>
+          {formattedBalance}
+          {profitFluctuation !== 0 && (
+            <sup
+              className={`text-sm ${
+                profitFluctuation > 0 ? "text-success-dark" : "text-error-dark"
+              }`}>
+              {`${parseFloat(profitFluctuation || "0.00").toLocaleString()}%`}
+            </sup>
+          )}
+        </p>
         <button className='accent-btn w-3/4 mt-5 lg:mt-20' onClick={() => navigate("/app/deposit")}>
           deposit funds
         </button>
