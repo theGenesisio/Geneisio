@@ -32,7 +32,7 @@ const FAQs = () => {
     },
     {
       question: "What are the deposit limits?",
-      answer: "The minimum deposit is $50, and the maximum deposit per plan is capped at $1,000.",
+      answer: "Minimum 500 maximum from $500,000-$1500000",
     },
     {
       question: "How is my money protected and profits guaranteed?",
