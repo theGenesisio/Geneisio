@@ -1,4 +1,4 @@
-import { UserIcon } from "@heroicons/react/24/solid";
+import { ArrowTopRightOnSquareIcon, UserIcon } from "@heroicons/react/24/solid";
 import { WelcomeIllustration } from "../../../assets/utilities";
 import useAuth from "../../auth/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -22,9 +22,14 @@ const Welcome = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const profit = parseFloat(user?.wallet?.balance || "0.00");
+  const cryptoBalance = parseFloat(user?.wallet?.crypto?.cryptoBalance || "0.00");
   const profitFluctuation = parseFloat(user?.wallet?.fluctuation || "0.00");
   const formattedBalance =
     profit < 0 ? `-$${Math.abs(profit).toLocaleString()}` : `$${profit.toLocaleString()}`;
+  const formattedCryptoBalance =
+    cryptoBalance < 0
+      ? `-$${Math.abs(cryptoBalance).toLocaleString()}`
+      : `$${cryptoBalance.toLocaleString()}`;
 
   return (
     <Card className='dashboard-box flex flex-row relative !p-0' variant='gradient' color='gray'>
@@ -32,7 +37,7 @@ const Welcome = () => {
         <UserIcon className='h-7 w-7' />
         <h1 className='font-semibold text-xl'>{user?.fullName || "Customer"}</h1>
         <p className='text-sm text-primary-light capitalize'>Account Balance</p>
-        <p className='font-semibold text-2xl lg:text-4xl py-4 text-white'>
+        <p className='font-semibold text-2xl lg:text-4xl py-2 text-white'>
           {formattedBalance}
           {profitFluctuation !== 0 && (
             <sup
@@ -42,6 +47,15 @@ const Welcome = () => {
               {`${parseFloat(profitFluctuation || "0.00").toLocaleString()}%`}
             </sup>
           )}
+        </p>
+        <p className='text-sm text-primary-light capitalize'>Crypto Assets</p>
+        <p className='font-semibold text-xl lg:text-2xl py-2 text-white'>
+          {formattedCryptoBalance}
+          <ArrowTopRightOnSquareIcon
+            className='h-5 w-5 inline-block text-primary-light mx-2 cursor-pointer hover:text-accent transition-colors delay-100 duration-500 align-baseline hover:scale-110'
+            title='View Assets'
+            onClick={() => navigate("/app/assets")}
+          />
         </p>
         <button className='accent-btn w-3/4 mt-5 lg:mt-20' onClick={() => navigate("/app/deposit")}>
           deposit funds

@@ -27,6 +27,7 @@ import Contact from "./app/Contact";
 import About from "./app/About";
 import Smartsupp from "./layout/Smartsupp";
 import CopyTrade from "./app/CopyTrade";
+import Assets from "./app/Assets";
 export default function Router() {
   const LandingLayout = () => {
     return (
@@ -97,6 +98,7 @@ export default function Router() {
         { path: "withdrawal", element: <Withdrawal /> },
         { path: "security", element: <ResetPassword /> },
         { path: "plans", element: <Plans /> },
+        { path: "assets", element: <Assets /> },
         { path: "trade", element: <LiveTrade /> },
         { path: "copy-trading", element: <CopyTrade /> },
         { path: "kyc", element: <Kyc /> },

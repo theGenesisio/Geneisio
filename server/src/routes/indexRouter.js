@@ -370,4 +370,17 @@ Router.route('/copy-trade')
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     })
+Router.route('/live-prices')
+    .get(authenticate, async (req, res) => {
+        try {
+            const livePrices = await findAny(18);
+            if (!livePrices || livePrices.length < 1) {
+                return res.status(404).json({ message: 'Live data currently unavailable, Please try again later' });
+            }
+            return res.status(200).json({ message: 'Live data loaded', livePrices });
+        } catch (error) {
+            console.error('Error in getting live data:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    })
 export default Router;

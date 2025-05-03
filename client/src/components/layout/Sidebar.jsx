@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import UtcTime from "../app/subComponents/Time";
+// import UtcTime from "../app/subComponents/Time";
 import useAuth from "../auth/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  clockIcon,
+  // clockIcon,
   liveTradeIcon,
   plansIcon,
   securityIcon,
   supportIcon,
   traderIcon,
   transactionIcon,
+  walletIcon,
 } from "../../assets/icons";
 import {
   IconButton,
@@ -103,12 +104,12 @@ function SidebarContent() {
         </Typography>
       </Link>
       <List className='text-text-light'>
-        <ListItem>
+        {/* <ListItem>
           <ListItemPrefix>
             <span className='h-5 w-5 scale-125'>{clockIcon}</span>
           </ListItemPrefix>
           <UtcTime />
-        </ListItem>
+        </ListItem> */}
         <Accordion
           open={open === 1}
           icon={
@@ -190,6 +191,12 @@ function SidebarContent() {
           </AccordionBody>
         </Accordion>
         <hr className='my-2 border-primary-light' />
+        <ListItem onClick={() => navigate("./assets")}>
+          <ListItemPrefix>
+            <span className='h-5 w-5 scale-125'>{walletIcon}</span>
+          </ListItemPrefix>
+          Assets
+        </ListItem>
         <ListItem onClick={() => navigate("./plans")}>
           <ListItemPrefix>
             <span className='h-5 w-5 scale-125'>{plansIcon}</span>

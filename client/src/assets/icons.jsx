@@ -174,6 +174,36 @@ const usdtIcon = (
     </g>
   </svg>
 );
+const walletIcon = (
+  <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+    <path
+      fill='currentColor'
+      d='M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5h-8q-1.775 0-2.887 1.113T9 9v6q0 1.775 1.113 2.888T13 19h8q0 .825-.587 1.413T19 21zm8-4q-.825 0-1.412-.587T11 15V9q0-.825.588-1.412T13 7h7q.825 0 1.413.588T22 9v6q0 .825-.587 1.413T20 17zm3-3.5q.65 0 1.075-.425T17.5 12t-.425-1.075T16 10.5t-1.075.425T14.5 12t.425 1.075T16 13.5'
+    />
+  </svg>
+);
+const xrpIcon = (
+  <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 32 32'>
+    <g fill='none'>
+      <circle cx='16' cy='16' r='16' fill='#23292F' />
+      <path
+        fill='#FFF'
+        d='M23.07 8h2.89l-6.015 5.957a5.62 5.62 0 0 1-7.89 0L6.035 8H8.93l4.57 4.523a3.556 3.556 0 0 0 4.996 0zM8.895 24.563H6l6.055-5.993a5.62 5.62 0 0 1 7.89 0L26 24.562h-2.895L18.5 20a3.556 3.556 0 0 0-4.996 0l-4.61 4.563z'
+      />
+    </g>
+  </svg>
+);
+const solanaIcon = (
+  <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 32 32'>
+    <g fill='none'>
+      <circle cx='16' cy='16' r='16' fill='#66F9A1' />
+      <path
+        fill='#FFF'
+        d='M9.925 19.687a.6.6 0 0 1 .415-.17h14.366a.29.29 0 0 1 .207.497l-2.838 2.815a.6.6 0 0 1-.415.171H7.294a.291.291 0 0 1-.207-.498zm0-10.517A.6.6 0 0 1 10.34 9h14.366c.261 0 .392.314.207.498l-2.838 2.815a.6.6 0 0 1-.415.17H7.294a.291.291 0 0 1-.207-.497zm12.15 5.225a.6.6 0 0 0-.415-.17H7.294a.291.291 0 0 0-.207.498l2.838 2.815c.11.109.26.17.415.17h14.366a.291.291 0 0 0 .207-.498z'
+      />
+    </g>
+  </svg>
+);
 export {
   warningIcon,
   dismissIcon,
@@ -197,4 +227,7 @@ export {
   paypalIcon,
   traderIcon,
   usdtIcon,
+  walletIcon,
+  xrpIcon,
+  solanaIcon,
 };
