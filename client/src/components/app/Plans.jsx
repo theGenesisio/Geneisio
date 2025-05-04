@@ -78,9 +78,9 @@ export default function PricingCard() {
   };
 
   return (
-    <section className='w-full pb-4'>
+    <section className='w-full h-full pb-4'>
       {/* Card showcase */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4'>
         {loading ? (
           <Loader />
         ) : (

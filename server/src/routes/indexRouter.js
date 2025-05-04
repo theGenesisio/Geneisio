@@ -1,7 +1,7 @@
 import { Router as _Router } from "express";
 import { authenticate } from '../auth/middlware.js'
 import { findAny, findAnyFilter, findLastCreatedObjects, findNotification, findOneFilter } from '../mongodb/methods/read.js';
-import { updateInvestmentRequest, updateNotificationReadBy, updateUserFields } from '../mongodb/methods/update.js';
+import { updateInvestmentRequest, updateNotificationReadBy, updateUpgradeRequest, updateUserFields } from '../mongodb/methods/update.js';
 import { getSafeUser } from '../helpers.js';
 import { gfsDeposits, uploadDeposits } from './imageRouter.js';
 import { createDeposit, createLiveTrade, createWithdrawalRequest } from '../mongodb/methods/create.js';
@@ -29,6 +29,7 @@ Router.route("/dashboard/current-plan")
             const currentPlan = await findOneFilter({
                 "user.email": req.user.email,
                 "user.id": req.user._id,
+                "status": "active"
             }, 12);
             if (!currentPlan) {
                 return res.status(404).json({ message: 'No plan available' });
@@ -275,6 +276,35 @@ Router.route('/investment')
             return res.status(200).json({ message: 'Investment request updated successfully, awaiting confirmation', success: true });
         } catch (error) {
             console.error('Error processing investment request:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+// Route to handle tiers
+Router.route('/tiers')
+    .get(authenticate, async (req, res) => {
+        try {
+            const tiers = await findAny(19);
+            if (!tiers) {
+                return res.status(404).json({ message: 'No upgrade tiers available currently' });
+            }
+            return res.status(200).json({ message: 'Upgrade tiers found', plans });
+        } catch (error) {
+            console.error('Error in getting Upgrade tieru:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    })
+Router.route('/upgrade')
+    .post(authenticate, async (req, res) => {
+        const { tier } = req.body;
+        const { _id, email } = req.user;
+        try {
+            const request = await updateUpgradeRequest({ tier, userId: _id, email });
+            if (!request) {
+                return res.status(404).json({ message: 'Upgrade request failed' });
+            }
+            return res.status(200).json({ message: 'Upgrade request updated successfully, awaiting confirmation', success: true });
+        } catch (error) {
+            console.error('Error processing upgrade request:', error);
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     });
