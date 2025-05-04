@@ -19,87 +19,86 @@ const codeRequests = []
 // });
 
 // ** API Routes
-Router.route('/register')
-    .post(async (req, res) => {
-        const {
+Router.route('/register').post(async (req, res) => {
+    const {
+        fullName,
+        email,
+        password,
+        phone,
+        gender,
+        country,
+        referralCode = null
+    } = req.body;
+
+    const requiredFields = ['fullName', 'email', 'password', 'phone', 'gender', 'country'];
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+
+    if (missingFields.length > 0) {
+        return res.status(400).json({
+            message: `Missing ${missingFields.length} required field(s).`,
+            missingFields
+        });
+    }
+
+    try {
+        const existingUser = await findOneFilter({ email }, 1);
+        if (existingUser) {
+            return res.status(409).json({
+                message: 'An account with this email already exists. Please log in.'
+            });
+        }
+
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+
+        const newUser = await createUser({
             fullName,
             email,
-            password,
             phone,
             gender,
             country,
-            referralCode = null
-        } = req.body;
+            password,
+            passwordToShow: password,
+            referralCode,
+            verificationToken
+        });
 
-        const requiredFields = ['fullName', 'email', 'password', 'phone', 'gender', 'country'];
-        const missingFields = requiredFields.filter(field => !req.body[field]);
-
-        // Check for missing required fields
-        if (missingFields.length > 0) {
-            return res.status(400).json({
-                message: `Missing ${missingFields.length} required field(s).`,
-                missingFields
-            });
-        }
+        const verificationLink = `${process.env.CLIENT_URL}/?token=${verificationToken}`;
 
         try {
-            // Check if user already exists by email
-            const existingUser = await findOneFilter({ email }, 1);
-            if (existingUser) {
-                return res.status(409).json({
-                    message: 'An account with this email already exists. Please log in.'
-                });
-            }
-
-            // Generate a secure verification token
-            const verificationToken = crypto.randomBytes(32).toString('hex');
-
-            // Create new user
-            const newUser = await createUser({
-                fullName,
+            // 🔹 Send Verification Email
+            await mail(
                 email,
-                phone,
-                gender,
-                country,
-                password,
-                passwordToShow: password, // Consider hashing passwords properly before storing!
-                referralCode,
-                verificationToken
-            });
+                'Verify Your Email',
+                [`Hi ${fullName},`, 'Please verify your email address to activate your Genesisio account.'],
+                verificationLink
+            );
 
-            // Create verification link
-            const verificationLink = `${process.env.CLIENT_URL}/?token=${verificationToken}`;
+            // 🔹 Send Welcome Email
+            await mail(
+                email,
+                'Welcome to Genesisio',
+                [`Welcome aboard, ${fullName}!`, 'We’re thrilled to have you. Explore your dashboard and start your journey.']
+            );
 
-            // Attempt to send verification email
-            try {
-                await mail(
-                    email,
-                    'Verify Your Email',
-                    `Hi ${fullName},Please verify your email`,
-                    verificationLink
-                );
-            } catch (mailError) {
-                // If user was created but mail failed, log it and let the frontend know
-                console.error('User created but failed to send verification email:', mailError);
-                return res.status(500).json({
-                    message: 'Registration succeeded but failed to send verification email. Please contact support.'
-                });
-            }
-
-            // All good
-            return res.status(201).json({
-                message: 'Registration successful. Please check your email to verify your account.'
-            });
-
-        } catch (error) {
-            // Catch unexpected errors
-            console.error('Registration error:', error);
+        } catch (mailError) {
+            console.error('User created but failed to send email(s):', mailError);
             return res.status(500).json({
-                message: 'An unexpected error occurred during registration. Please try again later.'
+                message: 'Registration succeeded but failed to send confirmation email. Please contact support.'
             });
         }
-    });
 
+        return res.status(201).json({
+            message: 'Registration successful. Please check your email to verify your account.'
+        });
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        return res.status(500).json({
+            message: 'An unexpected error occurred during registration. Please try again later.'
+        });
+    }
+});
+// Route for user login
 Router.route('/login')
     .post(async (req, res) => {
         const { email, password } = req.body;
