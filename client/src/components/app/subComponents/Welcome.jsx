@@ -42,7 +42,7 @@ const Welcome = () => {
             </sup>
           )}
         </p>
-        <button className='accent-btn w-3/4 mt-5 lg:mt-20' onClick={() => navigate("/app/deposit")}>
+        <button className='accent-btn w-3/4 mt-5 lg:mt-40' onClick={() => navigate("/app/deposit")}>
           deposit funds
         </button>
       </div>

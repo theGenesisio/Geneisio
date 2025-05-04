@@ -52,7 +52,7 @@ const mail = async (email, subject, html, verificationLink = null) => {
 
     return false;
   } catch (error) {
-    console.error("Error sending upgrade email:", error);
+    console.error("Error sending email:", error);
     return false;
   }
 };
@@ -77,7 +77,10 @@ async function checkPasswordChange(startDate, interval = 21) {
 }
 function generateEmailHTMLVerification(details) {
   const { message, header, verificationLink = null } = details;
-  const messageHTML = message
+
+  const messages = Array.isArray(message) ? message : [message];
+
+  const messageHTML = messages
     .map(item => `<p style="margin: 0 0 25px 0; white-space: pre-wrap;">${item}</p>`)
     .join('');
   return `<!DOCTYPE html>
@@ -172,7 +175,10 @@ function generateEmailHTMLVerification(details) {
 }
 function generateWelcomeMail(details) {
   const { message, header } = details;
-  const messageHTML = message
+
+  // Normalize message into an array if it's not already
+  const messages = Array.isArray(message) ? message : [message];
+  const messageHTML = messages
     .map(item => `<p style="margin: 0 0 25px 0; white-space: pre-wrap;">${item}</p>`)
     .join('');
   return `<!DOCTYPE html>

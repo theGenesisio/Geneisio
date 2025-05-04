@@ -23,6 +23,7 @@ mongoose.connect(process.env.MONGO_ATLAS_URI, {
 
 // CORS configuration
 const allowedOrigins = {
+    // development: '*',
     development: 'http://localhost:5173',
     production: 'https://www.genesisio.net'
 };

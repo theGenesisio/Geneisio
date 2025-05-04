@@ -13,6 +13,11 @@ import crypto from 'crypto'
 import { getSafeUser } from '../helpers.js';
 const Router = _Router();
 const codeRequests = []
+// Router.route('/test-mail').get(async (req, res) => {
+//     const success = await mail('nathanmeyer045@gmail.com', 'Test Subject', 'Just testing it out for u',);
+//     res.json({ success });
+// });
+
 // ** API Routes
 Router.route('/register')
     .post(async (req, res) => {
