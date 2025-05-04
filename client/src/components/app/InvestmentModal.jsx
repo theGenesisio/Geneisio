@@ -5,6 +5,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom"; // Import navigate for redirection
 import { useNotification } from "../layout/NotificationHelper";
 import FetchWithAuth from "../auth/api";
+import useAuth from "../auth/useAuth";
 
 export default function InvestmentModal({ selectedPlan, onClose }) {
   // State to manage the investment amount
@@ -19,7 +20,8 @@ export default function InvestmentModal({ selectedPlan, onClose }) {
   const [frequencyError, setFrequencyError] = useState(""); // State for frequency error
   const navigate = useNavigate(); // Initialize navigate for redirection
   const { addNotification } = useNotification();
-
+  const { user } = useAuth(); // Get user information from auth context
+  const { wallet } = user; // Extract wallet information from user
   // Options for timing selection
   const timingOptions = [
     { text: "1 day", equiv: 1 },
@@ -138,6 +140,16 @@ export default function InvestmentModal({ selectedPlan, onClose }) {
             </p>
           </div>
         )}
+        <div className='flex flex-col p-2 min-w-96'>
+          <p className='text-lg text-primary-light capitalize'>Account Balance</p>
+          <p className='font-semibold text-xl lg:text-2xl py-2 text-white'>
+            $
+            {parseFloat(wallet?.balance).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 4,
+            })}
+          </p>
+        </div>
         <div className='space-y-4'>
           <div className='mb-4'>
             <label className='block text-sm font-semibold text-text-light mb-1' htmlFor='amount'>
