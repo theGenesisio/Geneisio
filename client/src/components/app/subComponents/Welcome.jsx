@@ -24,7 +24,15 @@ const Welcome = () => {
   const profit = parseFloat(user?.wallet?.balance || "0.00");
   const profitFluctuation = parseFloat(user?.wallet?.fluctuation || "0.00");
   const formattedBalance =
-    profit < 0 ? `-$${Math.abs(profit).toLocaleString()}` : `$${profit.toLocaleString()}`;
+    profit < 0
+      ? `-$${Math.abs(profit).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : `$${profit.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
   return (
     <Card className='dashboard-box flex flex-row relative !p-0' variant='gradient' color='gray'>
       <div className='w-2/3 p-4'>

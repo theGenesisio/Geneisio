@@ -24,8 +24,15 @@ const Assets = () => {
   const { addNotification } = useNotification();
   const formattedCryptoBalance =
     crypto?.cryptoBalance < 0
-      ? `-$${Math.abs(crypto?.cryptoBalance).toLocaleString()}`
-      : `$${crypto?.cryptoBalance.toLocaleString()}`;
+      ? `-$${Math.abs(crypto?.cryptoBalance).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : `$${crypto?.cryptoBalance.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
+
   useEffect(() => {
     (async () => {
       try {
@@ -109,31 +116,38 @@ const Assets = () => {
                     <tr key={asset} className='border-b hover:bg-primary-dark'>
                       <td className='p-4 uppercase'>{renderIcon(asset)}</td>
                       <td className='p-4 uppercase'>{asset || "N/A"}</td>
-                      <td className='p-4'>{parseFloat(amount).toFixed(6)}</td>
+                      <td className='p-4'>{parseFloat(amount).toFixed(2)}</td>
                       <td className='p-4'>
                         $
                         {(parseFloat(amount) * (usdData?.price || 0)).toLocaleString(undefined, {
                           minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
                         })}
                       </td>
-                      <td className='p-4'>${usdData?.price?.toLocaleString() || "0.000000"}</td>
+                      <td className='p-4'>
+                        $
+                        {usdData?.price?.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || "0.00"}
+                      </td>
                       <td
                         className={`p-4 ${
                           usdData?.percent_change_1h > 0 ? "text-success-dark" : "text-error-dark"
                         }`}>
-                        {usdData?.percent_change_1h?.toFixed(4) ?? "0.0000"}
+                        {usdData?.percent_change_1h?.toFixed(2) ?? "0.00"}
                       </td>
                       <td
                         className={`p-4 ${
                           usdData?.percent_change_24h > 0 ? "text-success-dark" : "text-error-dark"
                         }`}>
-                        {usdData?.percent_change_24h?.toFixed(4) ?? "0.0000"}
+                        {usdData?.percent_change_24h?.toFixed(2) ?? "0.00"}
                       </td>
                       <td
                         className={`p-4 ${
                           usdData?.volume_change_24h > 0 ? "text-success-dark" : "text-error-dark"
                         }`}>
-                        {usdData?.volume_change_24h?.toFixed(4) ?? "0.0000"}
+                        {usdData?.volume_change_24h?.toFixed(2) ?? "0.00"}
                       </td>
                     </tr>
                   );
