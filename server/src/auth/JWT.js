@@ -109,9 +109,9 @@ Router.route('/login')
             return res.status(404).json({ message: 'No user found' });
         }
 
-        if (!user.isVerified) {
-            return res.status(401).json({ message: 'Email not verified, please verify your email or contact support' });
-        }
+        // if (!user.isVerified) {
+        //     return res.status(401).json({ message: 'Email not verified, please verify your email or contact support' });
+        // }
         if (user.blocked) {
             return res.status(401).json({ message: 'User account is currently restricted, contact support to clarify' });
         }
