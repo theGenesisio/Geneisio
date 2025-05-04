@@ -7,7 +7,6 @@ import { gfsDeposits, uploadDeposits } from './imageRouter.js';
 import { createDeposit, createLiveTrade, createWithdrawalRequest } from '../mongodb/methods/create.js';
 import { Readable } from 'stream';
 import { isValidObjectId } from 'mongoose';
-import { create } from 'domain';
 const Router = _Router();
 // ** API Routes
 Router.route("/dashboard/lastWithdrawal")
@@ -34,7 +33,23 @@ Router.route("/dashboard/current-plan")
             if (!currentPlan) {
                 return res.status(404).json({ message: 'No plan available' });
             }
-            return res.status(200).json({ message: 'Plans found', currentPlan });
+            return res.status(200).json({ message: 'Plan found', currentPlan });
+        } catch (error) {
+            console.error('Error in getting currentPlan:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+Router.route("/current-tier")
+    .get(authenticate, async (req, res) => {
+        try {
+            const currentTier = await findOneFilter({
+                "user.email": req.user.email,
+                "user.id": req.user._id,
+            }, 20);
+            if (!currentTier) {
+                return res.status(404).json({ message: 'Active tier details unavailable' });
+            }
+            return res.status(200).json({ message: 'Active tier detail available', currentTier });
         } catch (error) {
             console.error('Error in getting currentPlan:', error);
             return res.status(500).json({ message: 'Internal Server Error' });
@@ -287,7 +302,7 @@ Router.route('/tiers')
             if (!tiers) {
                 return res.status(404).json({ message: 'No upgrade tiers available currently' });
             }
-            return res.status(200).json({ message: 'Upgrade tiers found', plans });
+            return res.status(200).json({ message: 'Upgrade tiers found', tiers });
         } catch (error) {
             console.error('Error in getting Upgrade tieru:', error);
             return res.status(500).json({ message: 'Internal Server Error' });

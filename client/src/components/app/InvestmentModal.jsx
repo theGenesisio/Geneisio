@@ -87,7 +87,7 @@ export default function InvestmentModal({ selectedPlan, onClose }) {
           }),
           credentials: "include",
         },
-        "Failed to create plan"
+        "Failed to invest"
       );
 
       if (response.failed) {

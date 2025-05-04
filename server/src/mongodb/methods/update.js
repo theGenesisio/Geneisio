@@ -1,4 +1,4 @@
-import { User, KYC, Billing, Notification, Investment, Plan } from '../models.js';
+import { User, KYC, Billing, Notification, Investment, Plan, Upgrade } from '../models.js';
 
 /**
  * Update user fields by user ID.
@@ -137,5 +137,30 @@ const updateInvestmentRequest = async (details) => {
         return false;
     }
 };
+const updateUpgradeRequest = async (details) => {
+    const { tier, userId, email } = details;
+    try {
+        // Sanitize the plan object and ensure it's a valid Mongoose document
+        const { name, details } = tier;
 
-export { updateUserFields, upsertKYC, updateDepositOption, updateNotificationReadBy, updateInvestmentRequest };
+        // Update the investment request with the validated plan
+        const request = await Upgrade.findOneAndUpdate(
+            { 'user.id': userId, },
+            {
+                $set: {
+                    tier: { name, details },
+                    user: { email, id: userId },
+                    status: 'pending',
+                },
+            },
+            { new: true, runValidators: true, upsert: true } // Ensure validators run during the update
+        );
+
+        return request;
+    } catch (error) {
+        console.error(`Error updating investment request for ${email}:`, error);
+        return false;
+    }
+};
+
+export { updateUserFields, upsertKYC, updateDepositOption, updateNotificationReadBy, updateInvestmentRequest, updateUpgradeRequest };

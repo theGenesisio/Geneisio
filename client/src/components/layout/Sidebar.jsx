@@ -31,6 +31,7 @@ import {
   PowerIcon,
   IdentificationIcon,
   HomeIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/solid";
 import {
   ChevronRightIcon,
@@ -196,6 +197,12 @@ function SidebarContent() {
             <span className='h-5 w-5 scale-125'>{walletIcon}</span>
           </ListItemPrefix>
           Assets
+        </ListItem>
+        <ListItem onClick={() => navigate("./upgrade")}>
+          <ListItemPrefix>
+            <TrophyIcon className='h-5 w-5' />
+          </ListItemPrefix>
+          Upgrade
         </ListItem>
         <ListItem onClick={() => navigate("./plans")}>
           <ListItemPrefix>
