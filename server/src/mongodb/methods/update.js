@@ -158,7 +158,7 @@ const updateUpgradeRequest = async (details) => {
 
         return request;
     } catch (error) {
-        console.error(`Error updating investment request for ${email}:`, error);
+        console.error(`Error updating request for ${email}:`, error);
         return false;
     }
 };

@@ -1,7 +1,7 @@
 import { Card, Dialog, CardHeader, CardBody, CardFooter } from "@material-tailwind/react";
 import {
-  ClipboardDocumentCheckIcon,
-  DocumentDuplicateIcon,
+  // ClipboardDocumentCheckIcon,
+  // DocumentDuplicateIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
@@ -151,12 +151,18 @@ export function DepositModal({ detail, handler, openState }) {
                 htmlFor='address'>
                 {details?.name === "bank" ? "Account number" : "Address"}{" "}
                 {copied ? (
-                  <ClipboardDocumentCheckIcon className='h-7 w-7 text-success-dark' />
+                  // <ClipboardDocumentCheckIcon className='h-7 w-7 text-success-dark' />
+                  <button className='accent-btn' onClick={copy}>
+                    Copied
+                  </button>
                 ) : (
-                  <DocumentDuplicateIcon
-                    className='h-5 w-5 hover:scale-110 transition-all duration-700 ease-in-out delay-200 cursor-copy'
-                    onClick={copy}
-                  />
+                  <button className='primary-btn' onClick={copy}>
+                    Copy
+                  </button>
+                  // <DocumentDuplicateIcon
+                  //   className='h-5 w-5 hover:scale-110 transition-all duration-700 ease-in-out delay-200 cursor-copy'
+                  //   onClick={copy}
+                  // />
                 )}
               </label>
               <input
